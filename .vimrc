@@ -1,7 +1,18 @@
-set encoding=utf-8
-set fileencodings=iso-2022-jp,cp932,sjis,euc-jp,utf-8
-inoremap <silent> jj <ESC>
+" defalut encoding
+:set encoding=utf-8
+" encoding to try when opening files
+:set fileencodings=ucs-bom,iso-2022-jp-3,iso-2022-jp,eucjp-ms,euc-jisx0213,euc-jp,sjis,cp932,utf-8
 
+"""""""""""" Key Mapping 
+" noremap: mapping
+" inoremap: mapping when insert mode
+" jj as ESC 
+inoremap <silent> jj <ESC>
+" move when insert mode 
+inoremap <C-h> <Left>
+inoremap <C-j> <Down>
+inoremap <C-k> <Up>
+inoremap <C-l> <Right>
 " An example for a vimrc file.
 "
 " Maintainer:	Bram Moolenaar <Bram@vim.org>
@@ -98,3 +109,23 @@ if !exists(":DiffOrig")
   command DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis
 		  \ | wincmd p | diffthis
 endif
+
+" For NeoBundle
+set nocompatible               " be iMproved
+filetype off
+if has('vim_starting')
+	set runtimepath+=~/.vim/bundle/neobundle.vim
+	call neobundle#begin(expand('~/.vim/bundle/'))
+	NeoBundleFetch 'Shougo/neobundle.vim'
+	call neobundle#end()
+endif
+" originalrepos on github
+NeoBundle 'Shougo/neobundle.vim'
+NeoBundle 'Shougo/unite.vim'
+NeoBundle 'Shougo/neomru.vim'
+""NeoBundle 'https://bitbucket.org/kovisoft/slimv'
+
+filetype plugin indent on     " required!
+filetype indent on
+syntax on
+
