@@ -2,7 +2,14 @@
 :set encoding=utf-8
 " encoding to try when opening files
 :set fileencodings=ucs-bom,iso-2022-jp-3,iso-2022-jp,eucjp-ms,euc-jisx0213,euc-jp,sjis,cp932,utf-8
-
+" 改行コードを自動認識
+set fileformats=unix,dos,mac
+" ヤンクしたテキストをクリップボードにコピー
+:set clipboard+=unnamed
+" 行番号を表示
+:set number
+" 空白文字を表示
+" :set list
 """""""""""" Key Mapping 
 " noremap: mapping
 " inoremap: mapping when insert mode
@@ -13,6 +20,115 @@ inoremap <C-h> <Left>
 inoremap <C-j> <Down>
 inoremap <C-k> <Up>
 inoremap <C-l> <Right>
+" 表示行単位で移動
+nnoremap j gj
+nnoremap k gk
+nnoremap gj j
+nnoremap gk k
+" auto complete brackets
+inoremap {<Enter> {}<Left><CR><ESC><S-o>
+inoremap [<Enter> []<Left><CR><ESC><S-o>
+inoremap (<Enter> ()<Left><CR><ESC><S-o>
+
+" tab and window division
+" 水平分割
+nnoremap ss :<C-u>sp<CR>
+" 垂直分割
+nnoremap sv :<C-u>vs<CR>
+" ウィンドウの移動
+nnoremap sn gt
+nnoremap sp gT
+nnoremap sh <C-w>h
+nnoremap sl <C-w>l
+nnoremap sj <C-w>j
+nnoremap sk <C-w>k
+" 新規タブ
+nnoremap st :<C-u>tabnew<CR>
+" s1 で1番左のウィンドウ、s2 で1番左から2番目のタブにジャンプ
+for n in range(1, 9)
+  execute 'nnoremap s' .n. ' ' .n.'<C-W><C-W>'
+endfor
+" Anywhere SID.
+function! s:SID_PREFIX()
+  return matchstr(expand('<sfile>'), '<SNR>\d\+_\zeSID_PREFIX$')
+endfunction
+" Set tabline.
+function! s:my_tabline()  "{{{
+  let s = ''
+  for i in range(1, tabpagenr('$'))
+    let bufnrs = tabpagebuflist(i)
+    let bufnr = bufnrs[tabpagewinnr(i) - 1]  " first window, first appears
+    let no = i  " display 0-origin tabpagenr.
+    let mod = getbufvar(bufnr, '&modified') ? '!' : ' '
+    let title = fnamemodify(bufname(bufnr), ':t')
+    let title = '[' . title . ']'
+    let s .= '%'.i.'T'
+    let s .= '%#' . (i == tabpagenr() ? 'TabLineSel' : 'TabLine') . '#'
+    let s .= no . ':' . title
+    let s .= mod
+    let s .= '%#TabLineFill# '
+  endfor
+  let s .= '%#TabLineFill#%T%=%#TabLine#'
+  return s
+endfunction "}}}
+let &tabline = '%!'. s:SID_PREFIX() . 'my_tabline()'
+set showtabline=2 " 常にタブラインを表示
+
+" The prefix key.
+nnoremap    [Tag]   <Nop>
+nmap    t [Tag]
+" Tab jump
+for n in range(1, 9)
+  execute 'nnoremap <silent> [Tag]'.n  ':<C-u>tabnext'.n.'<CR>'
+endfor
+" t1 で1番左のタブ、t2 で1番左から2番目のタブにジャンプ
+
+" コロンとセミコロンを入れ替え
+noremap ; :
+
+" netrwは常にtree view
+let g:netrw_liststyle=3
+
+" インデントの設定
+" 最初はタブかスペースどちらか確認
+:set list
+" タブをスペースにする
+:set expandtab
+" やっぱりタブにしたいとき
+" :set noet
+:set shiftwidth=2
+:set tabstop=2
+
+" swapファイルを作らない
+:set noswapfile
+" 上書き保存にする
+set backupcopy=yes
+
+" Anywhere SID.
+function! s:SID_PREFIX()
+  return matchstr(expand('<sfile>'), '<SNR>\d\+_\zeSID_PREFIX$')
+endfunction
+
+" vimdiffの色設定
+highlight DiffAdd    cterm=bold ctermfg=10 ctermbg=22
+highlight DiffDelete cterm=bold ctermfg=10 ctermbg=52
+highlight DiffChange cterm=bold ctermfg=10 ctermbg=17
+highlight DiffText   cterm=bold ctermfg=10 ctermbg=21
+" For NeoBundle
+set nocompatible               " be iMproved
+filetype off
+if has('vim_starting')
+	set runtimepath+=~/.vim/bundle/neobundle.vim
+	call neobundle#begin(expand('~/.vim/bundle/'))
+	NeoBundleFetch 'Shougo/neobundle.vim'
+	call neobundle#end()
+endif
+" originalrepos on github
+NeoBundle 'Shougo/neobundle.vim'
+NeoBundle 'Shougo/unite.vim'
+NeoBundle 'Shougo/neomru.vim'
+NeoBundle 'tpope/vim-fugitive'
+NeoBundle 'tomtom/tcomment_vim'
 " An example for a vimrc file.
 "
 " Maintainer:	Bram Moolenaar <Bram@vim.org>
@@ -109,21 +225,6 @@ if !exists(":DiffOrig")
   command DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis
 		  \ | wincmd p | diffthis
 endif
-
-" For NeoBundle
-set nocompatible               " be iMproved
-filetype off
-if has('vim_starting')
-	set runtimepath+=~/.vim/bundle/neobundle.vim
-	call neobundle#begin(expand('~/.vim/bundle/'))
-	NeoBundleFetch 'Shougo/neobundle.vim'
-	call neobundle#end()
-endif
-" originalrepos on github
-NeoBundle 'Shougo/neobundle.vim'
-NeoBundle 'Shougo/unite.vim'
-NeoBundle 'Shougo/neomru.vim'
-""NeoBundle 'https://bitbucket.org/kovisoft/slimv'
 
 filetype plugin indent on     " required!
 filetype indent on
