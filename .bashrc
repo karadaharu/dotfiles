@@ -18,3 +18,13 @@ alias vi=vim
 
 # search a word in text file
 alias search="find ./ -type f -print | xargs grep"
+
+# check permission
+alias checkmod="find ./ -perm 644"
+
+# rsync shortcut
+alias rsyncnav="rsync -nav --exclude-from ~/.rsyncignore "
+alias rsyncav="rsync -av --exclude-from ~/.rsyncignore "
+
+# port forwarding
+alias pf="ssh -N -D 10080 "
