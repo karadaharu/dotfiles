@@ -1,8 +1,3 @@
-#to read .bashrc
-if [ -f ~/.bashrc ] ; then
-. ~/.bashrc
-fi
-
 [[ -s "$HOME/.profile" ]] && source "$HOME/.profile" # Load the default .profile
 
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
@@ -27,4 +22,9 @@ export PATH=$HOME/.nodebrew/current/bin:$PATH
 
 # npm for kohgen
 export PATH="/Users/kazumasa/workspace/digitiminimi/kohgen/node_modules/.bin:$PATH"
+
+#to read .bashrc
+if [ -f ~/.bashrc ] ; then
+. ~/.bashrc
+fi
 

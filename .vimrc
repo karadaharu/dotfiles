@@ -142,7 +142,6 @@ if has('vim_starting')
 	set runtimepath+=~/.vim/bundle/neobundle.vim
 	call neobundle#begin(expand('~/.vim/bundle/'))
 	NeoBundleFetch 'Shougo/neobundle.vim'
-	call neobundle#end()
 endif
 " originalrepos on github
 NeoBundle 'Shougo/neobundle.vim'
@@ -153,6 +152,14 @@ NeoBundle 'tomtom/tcomment_vim'
 NeoBundle 'Shougo/neocomplcache'
 NeoBundle 'Shougo/neosnippet'
 NeoBundle 'Shougo/neosnippet-snippets'
+NeoBundle 'thinca/vim-template'
+NeoBundle 'ctrlpvim/ctrlp.vim'
+NeoBundle 'mattn/emmet-vim'
+call neobundle#end()
+
+let g:ctrlp_clear_cache_on_exit = 1
+let g:ctrlp_cache_dir = $HOME.'/.cache/ctrlp'
+
 " An example for a vimrc file.
 "
 " Maintainer:	Bram Moolenaar <Bram@vim.org>

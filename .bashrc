@@ -28,3 +28,8 @@ alias rsyncav="rsync -av --exclude-from ~/.rsyncignore "
 
 # port forwarding
 alias pf="ssh -N -D 10080 "
+
+# pyenv
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
