@@ -1,0 +1,24 @@
+[user]
+	name = Kazumasa
+	email = catter121@gmail.com
+[credential]
+	helper = osxkeychain
+[core]
+	excludesfile = /Users/kazumasa/.gitignore_global
+	editor = vim -c \"set fenc=utf-8\"
+[difftool "sourcetree"]
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	path = 
+[mergetool "sourcetree"]
+	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	trustExitCode = true
+[color]
+	ui = auto
+[alias]
+  	p = !git push origin `git rev-parse --abbrev-ref HEAD`
+  c = commit
+  st = status
+
+[merge "mergepbx"]
+  name = XCode project files merger
+  driver = mergepbx %O %A %B
