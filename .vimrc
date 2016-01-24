@@ -3,13 +3,13 @@
 " encoding to try when opening files
 :set fileencodings=utf-8
 ",ucs-bom,iso-2022-jp-3,iso-2022-jp,eucjp-ms,euc-jisx0213,euc-jp,sjis,cp932,utf-8
-" $B2~9T%3!<%I$r<+F0G'<1(B
+" 改行コードを自動認識
 set fileformats=unix,dos,mac
-" $B%d%s%/$7$?%F%-%9%H$r%/%j%C%W%\!<%I$K%3%T!<(B
+" ヤンクしたテキストをクリップボードにコピー
 :set clipboard+=unnamed
-" $B9THV9f$rI=<((B
+" 行番号を表示
 :set number
-" $B6uGrJ8;z$rI=<((B
+" 空白文字を表示
 " :set list
 """""""""""" Key Mapping 
 " noremap: mapping
@@ -21,7 +21,7 @@ inoremap <C-h> <Left>
 inoremap <C-j> <Down>
 inoremap <C-k> <Up>
 inoremap <C-l> <Right>
-" $BI=<(9TC10L$G0\F0(B
+" 表示行単位で移動
 nnoremap j gj
 nnoremap k gk
 nnoremap gj j
@@ -32,20 +32,20 @@ inoremap [<Enter> []<Left><CR><ESC><S-o>
 inoremap (<Enter> ()<Left><CR><ESC><S-o>
 
 " tab and window division
-" $B?eJ?J,3d(B
+" 水平分割
 nnoremap ss :<C-u>sp<CR>
-" $B?bD>J,3d(B
+" 垂直分割
 nnoremap sv :<C-u>vs<CR>
-" $B%&%#%s%I%&$N0\F0(B
+" ウィンドウの移動
 nnoremap sn gt
 nnoremap sp gT
 nnoremap sh <C-w>h
 nnoremap sl <C-w>l
 nnoremap sj <C-w>j
 nnoremap sk <C-w>k
-" $B?75,%?%V(B
+" 新規タブ
 nnoremap st :<C-u>tabnew<CR>
-" s1 $B$G(B1$BHV:8$N%&%#%s%I%&!"(Bs2 $B$G(B1$BHV:8$+$i(B2$BHVL\$N%?%V$K%8%c%s%W(B
+" s1 で1番左のウィンドウ、s2 で1番左から2番目のタブにジャンプ
 for n in range(1, 9)
   execute 'nnoremap s' .n. ' ' .n.'<C-W><C-W>'
 endfor
@@ -73,7 +73,7 @@ function! s:my_tabline()  "{{{
   return s
 endfunction "}}}
 let &tabline = '%!'. s:SID_PREFIX() . 'my_tabline()'
-set showtabline=2 " $B>o$K%?%V%i%$%s$rI=<((B
+set showtabline=2 " 常にタブラインを表示
 
 " The prefix key.
 nnoremap    [Tag]   <Nop>
@@ -82,27 +82,30 @@ nmap    t [Tag]
 for n in range(1, 9)
   execute 'nnoremap <silent> [Tag]'.n  ':<C-u>tabnext'.n.'<CR>'
 endfor
-" t1 $B$G(B1$BHV:8$N%?%V!"(Bt2 $B$G(B1$BHV:8$+$i(B2$BHVL\$N%?%V$K%8%c%s%W(B
+" t1 で1番左のタブ、t2 で1番左から2番目のタブにジャンプ
 
-" $B%3%m%s$H%;%_%3%m%s$rF~$lBX$((B
+" コロンとセミコロンを入れ替え
 noremap ; :
 
-" netrw$B$O>o$K(Btree view
+" netrwは常にtree view
 let g:netrw_liststyle=3
 
-" $B%$%s%G%s%H$N@_Dj(B
-" $B:G=i$O%?%V$+%9%Z!<%9$I$A$i$+3NG'(B
+" インデントの設定
+" 最初はタブかスペースどちらか確認
 :set list
-" $B%?%V$r%9%Z!<%9$K$9$k(B
+" タブをスペースにする
 :set expandtab
-" $B$d$C$Q$j%?%V$K$7$?$$$H$-(B
+" やっぱりタブにしたいとき
 " :set noet
 :set shiftwidth=2
 :set tabstop=2
 
-" swap$B%U%!%$%k$r:n$i$J$$(B
+" 色
+colorscheme mydefault
+
+" swapファイルを作らない
 :set noswapfile
-" $B>e=q$-J]B8$K$9$k(B
+" 上書き保存にする
 set backupcopy=yes
 
 " keymap for snippet 
@@ -131,7 +134,7 @@ function! s:SID_PREFIX()
   return matchstr(expand('<sfile>'), '<SNR>\d\+_\zeSID_PREFIX$')
 endfunction
 
-" vimdiff$B$N?'@_Dj(B
+" vimdiffの色設定
 highlight DiffAdd    cterm=bold ctermfg=10 ctermbg=22
 highlight DiffDelete cterm=bold ctermfg=10 ctermbg=52
 highlight DiffChange cterm=bold ctermfg=10 ctermbg=17
@@ -157,7 +160,23 @@ NeoBundle 'thinca/vim-template'
 NeoBundle 'ctrlpvim/ctrlp.vim'
 NeoBundle 'mattn/emmet-vim'
 NeoBundle 'wakatime/vim-wakatime'
+NeoBundle 'nathanaelkane/vim-indent-guides'
 call neobundle#end()
+
+" vim-indent-guides
+let g:indent_guides_auto_colors = 0
+" Vim 起動時 vim-indent-guides を自動起動
+let g:indent_guides_enable_on_vim_startup=1
+" ガイドをスタートするインデントの量
+let g:indent_guides_start_level=2
+" 自動カラー無効
+let g:indent_guides_auto_colors=0
+" 奇数番目のインデントの色
+autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=#444433 ctermbg=black
+" 偶数番目のインデントの色
+autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=#333344 ctermbg=darkgray
+" ガイドの幅
+let g:indent_guides_guide_size = 1
 
 let g:ctrlp_clear_cache_on_exit = 1
 let g:ctrlp_cache_dir = $HOME.'/.cache/ctrlp'
