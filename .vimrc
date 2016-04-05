@@ -161,6 +161,10 @@ NeoBundle 'ctrlpvim/ctrlp.vim'
 NeoBundle 'mattn/emmet-vim'
 NeoBundle 'wakatime/vim-wakatime'
 NeoBundle 'nathanaelkane/vim-indent-guides'
+NeoBundle 'thinca/vim-quickrun'
+NeoBundle 'jmcantrell/vim-virtualenv'
+NeoBundle 'hynek/vim-python-pep8-indent'
+NeoBundle 'Shutnik/jshint2.vim'
 call neobundle#end()
 
 " vim-indent-guides
@@ -183,6 +187,15 @@ let g:ctrlp_cache_dir = $HOME.'/.cache/ctrlp'
 let g:ctrlp_custom_ignore = {
   \ 'dir': '\v[\/]\.(git|hg|svn)$',
   \ }
+" vim-quickrun
+" * : すべての言語に対して
+let g:quickrun_config = {
+      \'*': {
+      \'hook/time/enable': '1',
+      \'outputter/buffer/vsplit': 'vertical 10sp'},}
+
+" jshint2.vim
+set runtimepath+=~/.vim/bundle/jshint2.vim/
 
 " An example for a vimrc file.
 "

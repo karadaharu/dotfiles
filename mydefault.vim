@@ -1,0 +1,1 @@
+/Users/kazumasa/.vim/colors/mydefault.vim

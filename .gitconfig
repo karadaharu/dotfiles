@@ -6,6 +6,8 @@
 [core]
 	excludesfile = /Users/kazumasa/.gitignore_global
 	editor = vim -c \"set fenc=utf-8\"
+	precomposeunicode = true
+	quotepath = false
 [difftool "sourcetree"]
 	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
 	path = 

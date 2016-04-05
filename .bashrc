@@ -36,3 +36,6 @@ eval "$(pyenv init -)"
 
 # swift
 export PATH="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/:$PATH"
+
+# hugo
+alias hugoorg="hugo server -t nofancy --watch"
