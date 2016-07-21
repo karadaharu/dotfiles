@@ -38,4 +38,7 @@ eval "$(pyenv init -)"
 export PATH="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/:$PATH"
 
 # hugo
-alias hugoorg="hugo server -t nofancy --watch"
+alias hugoorg="hugo server -t purehugo --watch"
+
+# bashmark
+source ~/.local/bin/bashmarks.sh

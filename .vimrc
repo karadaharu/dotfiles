@@ -1,14 +1,16 @@
 " defalut encoding
 :set encoding=utf-8
 " encoding to try when opening files
-:set fileencodings=utf-8
-",ucs-bom,iso-2022-jp-3,iso-2022-jp,eucjp-ms,euc-jisx0213,euc-jp,sjis,cp932,utf-8
+" :set fileencodings=utf-8
+:set fileencodings=ucs-bom,iso-2022-jp-3,iso-2022-jp,eucjp-ms,euc-jisx0213,euc-jp,sjis,cp932,utf-8
 " 改行コードを自動認識
 set fileformats=unix,dos,mac
 " ヤンクしたテキストをクリップボードにコピー
 :set clipboard+=unnamed
 " 行番号を表示
 :set number
+" バイナリモードで開いて最後に改行コードを入れない
+:set binary noeol
 " 空白文字を表示
 " :set list
 """""""""""" Key Mapping 
@@ -108,6 +110,9 @@ colorscheme mydefault
 " 上書き保存にする
 set backupcopy=yes
 
+" FileType setting
+autocmd BufRead,BufNewFile *.php setfiletype php
+
 " keymap for snippet 
 imap <C-k>     <Plug>(neosnippet_expand_or_jump)
 smap <C-k>     <Plug>(neosnippet_expand_or_jump)
@@ -122,8 +127,9 @@ smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
 \: "\<TAB>"
 
 " For snippet_complete marker.
+"
 if has('conceal')
-  set conceallevel=2 concealcursor=niv
+  set conceallevel=0
 endif
 " assign snippet directory
 let g:neosnippet#snippets_directory='~/.vim/bundle/neosnippet-snippets/snippets/'
@@ -134,38 +140,135 @@ function! s:SID_PREFIX()
   return matchstr(expand('<sfile>'), '<SNR>\d\+_\zeSID_PREFIX$')
 endfunction
 
-" vimdiffの色設定
-highlight DiffAdd    cterm=bold ctermfg=10 ctermbg=22
-highlight DiffDelete cterm=bold ctermfg=10 ctermbg=52
-highlight DiffChange cterm=bold ctermfg=10 ctermbg=17
-highlight DiffText   cterm=bold ctermfg=10 ctermbg=21
-" For NeoBundle
-set nocompatible               " be iMproved
-filetype off
-if has('vim_starting')
-	set runtimepath+=~/.vim/bundle/neobundle.vim
-	call neobundle#begin(expand('~/.vim/bundle/'))
-	NeoBundleFetch 'Shougo/neobundle.vim'
+" dein.vim
+if &compatible
+  set nocompatible
 endif
-" originalrepos on github
-NeoBundle 'Shougo/neobundle.vim'
-NeoBundle 'Shougo/unite.vim'
-NeoBundle 'Shougo/neomru.vim'
-NeoBundle 'tpope/vim-fugitive'
-NeoBundle 'tomtom/tcomment_vim'
-NeoBundle 'Shougo/neocomplcache'
-NeoBundle 'Shougo/neosnippet'
-NeoBundle 'Shougo/neosnippet-snippets'
-NeoBundle 'thinca/vim-template'
-NeoBundle 'ctrlpvim/ctrlp.vim'
-NeoBundle 'mattn/emmet-vim'
-NeoBundle 'wakatime/vim-wakatime'
-NeoBundle 'nathanaelkane/vim-indent-guides'
-NeoBundle 'thinca/vim-quickrun'
-NeoBundle 'jmcantrell/vim-virtualenv'
-NeoBundle 'hynek/vim-python-pep8-indent'
-NeoBundle 'Shutnik/jshint2.vim'
-call neobundle#end()
+set runtimepath+=~/.vim/dein/repos/github.com/Shougo/dein.vim
+
+call dein#begin(expand('~/.vim/dein'))
+
+call dein#add('Shougo/dein.vim')
+call dein#add('Shougo/unite.vim')
+call dein#add('Shougo/neomru.vim')
+call dein#add('tpope/vim-fugitive')
+call dein#add('tomtom/tcomment_vim')
+call dein#add('Shougo/neosnippet')
+call dein#add('Shougo/neosnippet-snippets')
+call dein#add('thinca/vim-template')
+call dein#add('ctrlpvim/ctrlp.vim')
+call dein#add('mattn/emmet-vim')
+call dein#add('wakatime/vim-wakatime')
+call dein#add('nathanaelkane/vim-indent-guides')
+call dein#add('thinca/vim-quickrun')
+call dein#add('jmcantrell/vim-virtualenv')
+call dein#add('hynek/vim-python-pep8-indent')
+call dein#add('Shutnik/jshint2.vim')
+call dein#add('nrocco/vim-phplint')
+call dein#add('mileszs/ack.vim')
+call dein#add('rking/ag.vim')
+call dein#add('stephpy/vim-php-cs-fixer')
+call dein#add('joonty/vim-phpqa.git')
+call dein#add('nvie/vim-flake8')
+call dein#add('mileszs/ack.vim')
+call dein#add('godlygeek/tabular')
+call dein#add('plasticboy/vim-markdown')
+call dein#end()
+
+filetype plugin indent on
+" もし、未インストールものものがあったらインストール
+if dein#check_install()
+  call dein#install()
+endif
+
+" ack + ag
+let g:memo_path = '/Users/kazumasa/karadaharu.org/content'
+let amemo_path = '/Users/kazumasa/karadaharu.org/content'
+let g:ackprg = 'ag --vimgrep'
+nnoremap <Space>a :SearchMemo<Space>
+function SearchMemoFunc(keyword)
+  execute 'Ack! '.eval("a:keyword").' '. eval("g:memo_path")
+endfunction
+let g:keyw = 'ruby'
+command -nargs=1 SearchMemo call SearchMemoFunc("<args>")
+
+" vim-markdown
+let g:vim_markdown_folding_disabled = 1
+:nnoremap h1 mx0i<C-r>'#<ESC>`x
+:nnoremap h2 mx0i<C-r>'###<ESC>`x
+:nnoremap h3 mx0i<C-r>'##<ESC>`x
+:nnoremap hh mx0dw`x
+
+" neocomplete
+" Note: This option must set it in .vimrc(_vimrc).  NOT IN .gvimrc(_gvimrc)!
+" Disable AutoComplPop.
+let g:acp_enableAtStartup = 0
+" Use neocomplete.
+let g:neocomplete#enable_at_startup = 1
+" Use smartcase.
+let g:neocomplete#enable_smart_case = 1
+" Set minimum syntax keyword length.
+let g:neocomplete#sources#syntax#min_keyword_length = 3
+let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
+
+" Define dictionary.
+let g:neocomplete#sources#dictionary#dictionaries = {
+    \ 'default' : '',
+    \ 'vimshell' : $HOME.'/.vimshell_hist',
+    \ 'scheme' : $HOME.'/.gosh_completions'
+        \ }
+
+" Define keyword.
+if !exists('g:neocomplete#keyword_patterns')
+    let g:neocomplete#keyword_patterns = {}
+endif
+let g:neocomplete#keyword_patterns['default'] = '\h\w*'
+
+" Plugin key-mappings.
+inoremap <expr><C-g>     neocomplete#undo_completion()
+inoremap <expr><C-l>     neocomplete#complete_common_string()
+
+" Recommended key-mappings.
+" <CR>: close popup and save indent.
+inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+function! s:my_cr_function()
+  return (pumvisible() ? "\<C-y>" : "" ) . "\<CR>"
+  " For no inserting <CR> key.
+  "return pumvisible() ? "\<C-y>" : "\<CR>"
+endfunction
+" <TAB>: completion.
+inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+" Close popup by <Space>.
+"inoremap <expr><Space> pumvisible() ? "\<C-y>" : "\<Space>"
+
+" AutoComplPop like behavior.
+"let g:neocomplete#enable_auto_select = 1
+
+" Shell like behavior(not recommended).
+"set completeopt+=longest
+"let g:neocomplete#enable_auto_select = 1
+"let g:neocomplete#disable_auto_complete = 1
+"inoremap <expr><TAB>  pumvisible() ? "\<Down>" : "\<C-x>\<C-u>"
+
+" Enable omni completion.
+autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+
+" Enable heavy omni completion.
+if !exists('g:neocomplete#sources#omni#input_patterns')
+  let g:neocomplete#sources#omni#input_patterns = {}
+endif
+"let g:neocomplete#sources#omni#input_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
+"let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
+"let g:neocomplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
+
+" For perlomni.vim setting.
+" https://github.com/c9s/perlomni.vim
+let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
+" end of neocomplete
 
 " vim-indent-guides
 let g:indent_guides_auto_colors = 0
@@ -196,6 +299,22 @@ let g:quickrun_config = {
 
 " jshint2.vim
 set runtimepath+=~/.vim/bundle/jshint2.vim/
+
+" vim-phplint
+noremap <C-l> :Phplint<CR>
+
+function! s:vimdiff_in_newtab(...)
+  if a:0 == 1
+    tabedit %:p
+    exec 'rightbelow vertical diffsplit ' . a:1
+  else
+    exec 'tabedit ' . a:1
+    for l:file in a:000[1 :]
+      exec 'rightbelow vertical diffsplit ' . l:file
+    endfor
+  endif
+endfunction
+command! -bar -nargs=+ -complete=file Diff  call s:vimdiff_in_newtab(<f-args>)
 
 " An example for a vimrc file.
 "

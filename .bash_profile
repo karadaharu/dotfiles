@@ -3,6 +3,7 @@
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 alias chrome='open -a "/Applications/Google Chrome.app"'
 export PATH=/usr/local/bin:$PATH
+export PATH=/Users/kazumasa/.composer/vendor/bin:$PATH
 
 export PATH="/usr/texbin:$PATH"
 
@@ -27,4 +28,7 @@ export PATH="/Users/kazumasa/workspace/digitiminimi/kohgen/node_modules/.bin:$PA
 if [ -f ~/.bashrc ] ; then
 . ~/.bashrc
 fi
+# virtualenv
+eval "$(pyenv virtualenv-init -)"
 
+test -e "${HOME}/.iterm2_shell_integration.bash" && source "${HOME}/.iterm2_shell_integration.bash"

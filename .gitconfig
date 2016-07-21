@@ -17,10 +17,17 @@
 [color]
 	ui = auto
 [alias]
-  	p = !git push origin `git rev-parse --abbrev-ref HEAD`
+  p = !git push origin `git rev-parse --abbrev-ref HEAD`
   c = commit
   st = status
+  ck = checkout
 
 [merge "mergepbx"]
   name = XCode project files merger
   driver = mergepbx %O %A %B
+[filter "lfs"]
+	clean = git-lfs clean %f
+	smudge = git-lfs smudge %f
+	required = true
+[commit]
+	template = /Users/kazumasa/.stCommitMsg
