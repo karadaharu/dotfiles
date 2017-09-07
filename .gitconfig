@@ -21,6 +21,7 @@
   c = commit
   st = status
   ck = checkout
+  br = branch
 
 [merge "mergepbx"]
   name = XCode project files merger

@@ -11,8 +11,6 @@ set fileformats=unix,dos,mac
 :set number
 " バイナリモードで開いて最後に改行コードを入れない
 :set binary noeol
-" 空白文字を表示
-" :set list
 """""""""""" Key Mapping 
 " noremap: mapping
 " inoremap: mapping when insert mode
@@ -35,21 +33,21 @@ inoremap (<Enter> ()<Left><CR><ESC><S-o>
 
 " tab and window division
 " 水平分割
-nnoremap ss :<C-u>sp<CR>
+nnoremap fs :<C-u>sp<CR>
 " 垂直分割
-nnoremap sv :<C-u>vs<CR>
+nnoremap fv :<C-u>vs<CR>
 " ウィンドウの移動
-nnoremap sn gt
-nnoremap sp gT
-nnoremap sh <C-w>h
-nnoremap sl <C-w>l
-nnoremap sj <C-w>j
-nnoremap sk <C-w>k
+nnoremap fn gt
+nnoremap fp gT
+nnoremap fh <C-w>h
+nnoremap fl <C-w>l
+nnoremap fj <C-w>j
+nnoremap fk <C-w>k
 " 新規タブ
-nnoremap st :<C-u>tabnew<CR>
-" s1 で1番左のウィンドウ、s2 で1番左から2番目のタブにジャンプ
+nnoremap ft :<C-u>tabnew<CR>
+" f1 で1番左のウィンドウ、s2 で1番左から2番目のタブにジャンプ
 for n in range(1, 9)
-  execute 'nnoremap s' .n. ' ' .n.'<C-W><C-W>'
+  execute 'nnoremap f' .n. ' ' .n.'<C-W><C-W>'
 endfor
 " Anywhere SID.
 function! s:SID_PREFIX()
@@ -113,10 +111,70 @@ set backupcopy=yes
 " FileType setting
 autocmd BufRead,BufNewFile *.php setfiletype php
 
+
+" □とか○の文字があってもカーソル位置がずれないようにする
+if exists('&ambiwidth')
+  set ambiwidth=double
+endif
+
+set ttyfast
+set lazyredraw
+
+" Anywhere SID.
+function! s:SID_PREFIX()
+  return matchstr(expand('<sfile>'), '<SNR>\d\+_\zeSID_PREFIX$')
+endfunction
+
+" dein.vim
+if &compatible
+  set nocompatible
+endif
+set runtimepath+=~/.vim/dein/repos/github.com/Shougo/dein.vim
+
+call dein#begin(expand('~/.vim/dein'))
+  call dein#add('Shougo/dein.vim')
+  call dein#add('Shougo/unite.vim')
+  call dein#add('Shougo/neomru.vim')
+  call dein#add('tpope/vim-fugitive')
+  call dein#add('tomtom/tcomment_vim')
+  call dein#add('Shougo/neosnippet')
+  call dein#add('Shougo/neosnippet-snippets')
+  call dein#add('thinca/vim-template')
+  call dein#add('ctrlpvim/ctrlp.vim')
+  call dein#add('mattn/emmet-vim')
+  call dein#add('wakatime/vim-wakatime')
+  call dein#add('nathanaelkane/vim-indent-guides')
+  call dein#add('thinca/vim-quickrun')
+  call dein#add('jmcantrell/vim-virtualenv')
+  call dein#add('hynek/vim-python-pep8-indent')
+  call dein#add('Shutnik/jshint2.vim')
+  call dein#add('nrocco/vim-phplint')
+  call dein#add('stephpy/vim-php-cs-fixer')
+  call dein#add('joonty/vim-phpqa.git')
+  call dein#add('nvie/vim-flake8')
+  call dein#add('mileszs/ack.vim')
+  call dein#add('rking/ag.vim')
+  call dein#add('Shougo/neocomplete.vim')
+  call dein#add('karadaharu/slimux')
+  call dein#add('nvie/vim-flake8')
+call dein#end()
+j
+filetype plugin indent on
+" もし、未インストールものものがあったらインストール
+if dein#check_install()
+  call dein#install()
+endif
+
+" 隠しファイルを表示する
+let NERDTreeShowHidden = 1
+
+"
 " keymap for snippet 
 imap <C-k>     <Plug>(neosnippet_expand_or_jump)
 smap <C-k>     <Plug>(neosnippet_expand_or_jump)
 xmap <C-k>     <Plug>(neosnippet_expand_target)
+
+" 
 
 " SuperTab like snippets behavior.
 imap <expr><TAB> neosnippet#expandable_or_jumpable() ?
@@ -133,72 +191,29 @@ if has('conceal')
 endif
 " assign snippet directory
 let g:neosnippet#snippets_directory='~/.vim/bundle/neosnippet-snippets/snippets/'
-
-
-" Anywhere SID.
-function! s:SID_PREFIX()
-  return matchstr(expand('<sfile>'), '<SNR>\d\+_\zeSID_PREFIX$')
-endfunction
-
-" dein.vim
-if &compatible
-  set nocompatible
-endif
-set runtimepath+=~/.vim/dein/repos/github.com/Shougo/dein.vim
-
-call dein#begin(expand('~/.vim/dein'))
-
-call dein#add('Shougo/dein.vim')
-call dein#add('Shougo/unite.vim')
-call dein#add('Shougo/neomru.vim')
-call dein#add('tpope/vim-fugitive')
-call dein#add('tomtom/tcomment_vim')
-call dein#add('Shougo/neosnippet')
-call dein#add('Shougo/neosnippet-snippets')
-call dein#add('thinca/vim-template')
-call dein#add('ctrlpvim/ctrlp.vim')
-call dein#add('mattn/emmet-vim')
-call dein#add('wakatime/vim-wakatime')
-call dein#add('nathanaelkane/vim-indent-guides')
-call dein#add('thinca/vim-quickrun')
-call dein#add('jmcantrell/vim-virtualenv')
-call dein#add('hynek/vim-python-pep8-indent')
-call dein#add('Shutnik/jshint2.vim')
-call dein#add('nrocco/vim-phplint')
-call dein#add('mileszs/ack.vim')
-call dein#add('rking/ag.vim')
-call dein#add('stephpy/vim-php-cs-fixer')
-call dein#add('joonty/vim-phpqa.git')
-call dein#add('nvie/vim-flake8')
-call dein#add('mileszs/ack.vim')
-call dein#add('godlygeek/tabular')
-call dein#add('plasticboy/vim-markdown')
-call dein#end()
-
-filetype plugin indent on
-" もし、未インストールものものがあったらインストール
-if dein#check_install()
-  call dein#install()
-endif
-
 " ack + ag
-let g:memo_path = '/Users/kazumasa/karadaharu.org/content'
-let amemo_path = '/Users/kazumasa/karadaharu.org/content'
+let g:memo_path = '/Users/kazumasa/Dropbox/text/coding/'
 let g:ackprg = 'ag --vimgrep'
 nnoremap <Space>a :SearchMemo<Space>
 function SearchMemoFunc(keyword)
   execute 'Ack! '.eval("a:keyword").' '. eval("g:memo_path")
 endfunction
-let g:keyw = 'ruby'
 command -nargs=1 SearchMemo call SearchMemoFunc("<args>")
 
-" vim-markdown
-let g:vim_markdown_folding_disabled = 1
-:nnoremap h1 mx0i<C-r>'#<ESC>`x
-:nnoremap h2 mx0i<C-r>'###<ESC>`x
-:nnoremap h3 mx0i<C-r>'##<ESC>`x
-:nnoremap hh mx0dw`x
+" markdown
+:nnoremap <Space>1 mx0i<C-r>'#<ESC>`x
+:nnoremap <Space>2 mx0i<C-r>'##<ESC>`x
+:nnoremap <Space>3 mx0i<C-r>'###<ESC>`x
+:nnoremap <Space>0 mx0dw`x
 
+" Slimux
+map <Leader>s :SlimuxREPLSendLine<CR>
+vmap <Leader>s :SlimuxREPLSendSelection<CR>
+map <Leader>b :SlimuxREPLSendBuffer<CR>
+map <Leader>a :SlimuxShellLast<CR>
+map <Leader>k :SlimuxSendKeysLast<CR>
+let g:slimux_python_ipython = 1
+let g:slimux_select_from_current_window = 1
 " neocomplete
 " Note: This option must set it in .vimrc(_vimrc).  NOT IN .gvimrc(_gvimrc)!
 " Disable AutoComplPop.
@@ -269,7 +284,7 @@ endif
 " https://github.com/c9s/perlomni.vim
 let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
 " end of neocomplete
-
+" "
 " vim-indent-guides
 let g:indent_guides_auto_colors = 0
 " Vim 起動時 vim-indent-guides を自動起動
@@ -285,17 +300,24 @@ autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=#333344 ctermbg=darkgr
 " ガイドの幅
 let g:indent_guides_guide_size = 1
 
-let g:ctrlp_clear_cache_on_exit = 1
+" ctrlpvim
+let g:ctrlp_clear_cache_on_exit = 0
 let g:ctrlp_cache_dir = $HOME.'/.cache/ctrlp'
 let g:ctrlp_custom_ignore = {
   \ 'dir': '\v[\/]\.(git|hg|svn)$',
   \ }
+if executable('ag')
+  let g:ctrlp_use_caching=0
+  let g:ctrlp_user_command='ag %s -i --nocolor --nogroup -g ""'
+endif
+
 " vim-quickrun
 " * : すべての言語に対して
 let g:quickrun_config = {
       \'*': {
       \'hook/time/enable': '1',
-      \'outputter/buffer/vsplit': 'vertical 10sp'},}
+      \'outputter/buffer/split': ':40vsplit'},}
+nnoremap <expr><silent> <C-c> quickrun#is_running() ? quickrun#sweep_sessions() : "\<C-c>"
 
 " jshint2.vim
 set runtimepath+=~/.vim/bundle/jshint2.vim/
@@ -397,7 +419,7 @@ if has("autocmd")
     \   exe "normal! g`\"" |
     \ endif
 
-  augroup END
+augroup END
 
 else
 
@@ -415,5 +437,5 @@ endif
 
 filetype plugin indent on     " required!
 filetype indent on
-syntax on
+" syntax on
 

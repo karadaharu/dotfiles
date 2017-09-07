@@ -32,3 +32,5 @@ fi
 eval "$(pyenv virtualenv-init -)"
 
 test -e "${HOME}/.iterm2_shell_integration.bash" && source "${HOME}/.iterm2_shell_integration.bash"
+eval "$(plenv init -)"
+export PATH="$HOME/.plenv/bin:$PATH"
