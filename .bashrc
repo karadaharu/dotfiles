@@ -68,4 +68,3 @@ alias youtube-dl-mp3="youtube-dl -x --audio-format mp3"
 alias to-utf8="nkf -w --overwrite"
 
 alias matlab="/Applications/MATLAB_R2015b.app/bin/matlab -nodesktop"
-cols = char('DN', 'DP', 'cTEC', 'SP4', 'mTEC');
