@@ -13,8 +13,8 @@ PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
 # PERL_MM_OPT="INSTALL_BASE=/Users/kazumasa/perl5"; export PERL_MM_OPT;
 
 # vi
-alias vim=/Applications/MacVim.app/Contents/MacOS/vim
-alias vi=vim
+alias vim='/usr/local/bin/vim -v'
+alias vi='vim'
 
 # search a word in text file
 alias search="find ./ -type f -print | xargs grep"
@@ -68,3 +68,13 @@ alias youtube-dl-mp3="youtube-dl -x --audio-format mp3"
 alias to-utf8="nkf -w --overwrite"
 
 alias matlab="/Applications/MATLAB_R2015b.app/bin/matlab -nodesktop"
+
+# Docker
+function dockerlogin()
+{
+  sudo docker exec -i -t $1 /bin/bash
+}
+
+# Go
+export GOPATH=~/go
+export PATH=$PATH:$GOPATH/bin

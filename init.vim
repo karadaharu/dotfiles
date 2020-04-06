@@ -1,154 +1,6 @@
 echo "Get 0.1% better than yesterday."
-" Some shortcut key often used
-" Emmet : <c-y>,
-" vit select text inside tag
-" key for <leader>
-let mapleader =","
-let maplocalleader ="\\"
-" defalut encoding
-:set encoding=utf-8
-" encoding to try when opening files
-" :set fileencodings=utf-8
-:set fileencodings=ucs-bom,iso-2022-jp-3,iso-2022-jp,eucjp-ms,euc-jisx0213,euc-jp,sjis,cp932,utf-8
-" 改行コードを自動認識
-set fileformats=unix,dos,mac
-"" ヤンクしたテキストをクリップボードにコピー
-:set clipboard=unnamed
-" 行番号を表示
-:set number
-" バイナリモードで開いて最後に改行コードを入れない
-:set binary noeol
-""" Abbreviations
-" 言語ごとにprintデバッグを早くしたい
-augroup grp_print_debug
-  autocmd!
-  autocmd FileType javascript :nnoremap <buffer> <localleader>d viW<esc>a);<esc>Biconsole.log(<esc>lel
-augroup END
-"""""""""""" Key Mapping 
-" open vimrc
-nnoremap <leader>ev :vsplit $MYVIMRC<cr>
-" reload vimrc
-noremap <leader>sv :source $MYVIMRC<cr>
-
-" noremap: mapping
-" inoremap: mapping when insert mode
-" jk as ESC 
-inoremap <silent> jk <ESC>
-" move when insert mode 
-inoremap <C-h> <Left>
-inoremap <C-b> <Left>
-inoremap <C-j> <Down>
-inoremap <C-n> <Down>
-inoremap <C-k> <Up>
-inoremap <C-p> <Up>
-inoremap <C-l> <Right>
-inoremap <C-f> <Right>
-" 表示行単位で移動
-nnoremap j gj
-nnoremap k gk
-nnoremap gj j
-nnoremap gk k
-" auto complete brackets
-inoremap {<Enter> {}<Left><CR><ESC><S-o>
-inoremap [<Enter> []<Left><CR><ESC><S-o>
-inoremap (<Enter> ()<Left><CR><ESC><S-o>
-inoremap {<Space> {<Space><Space>}<LEFT><LEFT>
-inoremap (<Space> ()<LEFT>
-inoremap '<Space> ''<LEFT>
-
-" tab and window division
-" 水平分割
-nnoremap fs :<C-u>sp<CR>
-" 垂直分割
-nnoremap fv :<C-u>vs<CR>
-" ウィンドウの移動
-nnoremap fn gt
-nnoremap fp gT
-nnoremap fh <C-w>h
-nnoremap fl <C-w>l
-nnoremap fj <C-w>j
-nnoremap fk <C-w>k
-" 新規タブ
-nnoremap ft :<C-u>tabnew<CR>
-" f1 で1番左のウィンドウ、s2 で1番左から2番目のタブにジャンプ
-for n in range(1, 9)
-  execute 'nnoremap f' .n. ' ' .n.'<C-W><C-W>'
-endfor
-" Anywhere SID.
-function! s:SID_PREFIX()
-  return matchstr(expand('<sfile>'), '<SNR>\d\+_\zeSID_PREFIX$')
-endfunction
-" Set tabline.
-function! s:my_tabline()  "{{{
-  let s = ''
-  for i in range(1, tabpagenr('$'))
-    let bufnrs = tabpagebuflist(i)
-    let bufnr = bufnrs[tabpagewinnr(i) - 1]  " first window, first appears
-    let no = i  " display 0-origin tabpagenr.
-    let mod = getbufvar(bufnr, '&modified') ? '!' : ' '
-    let title = fnamemodify(bufname(bufnr), ':t')
-    let title = '[' . title . ']'
-    let s .= '%'.i.'T'
-    let s .= '%#' . (i == tabpagenr() ? 'TabLineSel' : 'TabLine') . '#'
-    let s .= no . ':' . title
-    let s .= mod
-    let s .= '%#TabLineFill# '
-  endfor
-  let s .= '%#TabLineFill#%T%=%#TabLine#'
-  return s
-endfunction "}}}
-let &tabline = '%!'. s:SID_PREFIX() . 'my_tabline()'
-set showtabline=2 " 常にタブラインを表示
-
-" The prefix key.
-nnoremap    [Tag]   <Nop>
-nmap    t [Tag]
-" Tab jump
-for n in range(1, 9)
-  execute 'nnoremap <silent> [Tag]'.n  ':<C-u>tabnext'.n.'<CR>'
-endfor
-" t1 で1番左のタブ、t2 で1番左から2番目のタブにジャンプ
-
-" コロンとセミコロンを入れ替え
-nnoremap ; :
-
-" netrwは常にtree view
-let g:netrw_liststyle=3
-
-" インデントの設定
-" 最初はタブかスペースどちらか確認
-:set list
-" タブをスペースにする
-:set expandtab
-" やっぱりタブにしたいとき
-" :set noet
-:set shiftwidth=2
-" :set tabstop=2
-" 色
-colorscheme mydefault
-
-" swapファイルを作らない
-:set noswapfile
-" 上書き保存にする
-set backupcopy=yes
-
-" FileType setting
-autocmd BufRead,BufNewFile *.php setfiletype php
-
-
-" □とか○の文字があってもカーソル位置がずれないようにする
-if exists('&ambiwidth')
-  set ambiwidth=double
-endif
-
-set ttyfast
-set lazyredraw
-
-" Anywhere SID.
-function! s:SID_PREFIX()
-  return matchstr(expand('<sfile>'), '<SNR>\d\+_\zeSID_PREFIX$')
-endfunction
-
+" For neovim + pyenv
+let g:python3_host_prog = $PYENV_ROOT . '/versions/anaconda3-2.4.0/bin/python3'
 " dein.vim
 if &compatible
   set nocompatible
@@ -166,7 +18,6 @@ call dein#begin(expand('~/.vim/dein'))
   call dein#add('thinca/vim-template')
   call dein#add('ctrlpvim/ctrlp.vim')
   call dein#add('mattn/emmet-vim')
-  call dein#add('wakatime/vim-wakatime')
   call dein#add('nathanaelkane/vim-indent-guides')
   call dein#add('thinca/vim-quickrun')
   call dein#add('jmcantrell/vim-virtualenv')
@@ -178,12 +29,12 @@ call dein#begin(expand('~/.vim/dein'))
   call dein#add('nvie/vim-flake8')
   call dein#add('mileszs/ack.vim')
   call dein#add('rking/ag.vim')
-  call dein#add('Shougo/neocomplete.vim')
-  call dein#add('karadaharu/slimux')
   call dein#add('nvie/vim-flake8')
   call dein#add('rust-lang/rust.vim')
   call dein#add('racer-rust/vim-racer')
   call dein#add('mxw/vim-jsx')
+  call dein#add('Shougo/deoplete.nvim')
+  call dein#add('zchee/deoplete-jedi')
 call dein#end()
 
 filetype plugin indent on
@@ -191,6 +42,115 @@ filetype plugin indent on
 if dein#check_install()
   call dein#install()
 endif
+
+let g:deoplete#enable_at_startup = 1
+
+" vim-template
+let g:template_basedir = '~/.config/nvim/'
+
+" deoplete
+let g:deoplete#enable_at_startup = 1
+
+" Some shortcut key often used
+" Emmet : <c-y>,
+" vit select text inside tag
+" key for <leader>
+let mapleader =","
+let maplocalleader ="\\"
+" defalut encoding
+:set encoding=utf-8
+" encoding to try when opening files
+" :set fileencodings=utf-8
+:set fileencodings=ucs-bom,iso-2022-jp-3,iso-2022-jp,eucjp-ms,euc-jisx0213,euc-jp,sjis,cp932,utf-8
+" automatically recognize line feed
+set fileformats=unix,dos,mac
+" copy yanked text to clipboard
+" when block pasting, set empty (only for neovim)
+" :set clipboard=
+" when you want to insert space to the end of lines
+" :set virtualedit+=block
+" and delete by d and paste by p
+:set clipboard=unnamed
+" display line number
+:set number
+" open in binary mode and don't insert line feed at the last of file
+:set binary noeol
+"""""""""""" Key Mapping 
+" exchange ; and :
+" (for US key)
+" nnoremap ; :
+" nnoremap : ;
+" open vimrc
+nnoremap <leader>ev :vsplit ~/Dropbox/dotfiles/init.vim<cr>
+" reload vimrc
+noremap <leader>sv :source ~/.config/nvim/init.vim<cr>
+" noremap: mapping
+" inoremap: mapping when insert mode
+" jk as ESC 
+inoremap <silent> jk <ESC>
+" move by displayed line
+nnoremap j gj
+nnoremap k gk
+nnoremap gj j
+nnoremap gk k
+" auto complete brackets
+inoremap {<Enter> {}<Left><CR><ESC><S-o>
+inoremap [<Enter> []<Left><CR><ESC><S-o>
+inoremap (<Enter> ()<Left><CR><ESC><S-o>
+inoremap {<Space> {<Space><Space>}<LEFT><LEFT>
+inoremap (<Space> ()<LEFT>
+inoremap '<Space> ''<LEFT>
+" tab and window division
+" divide horizontally 
+nnoremap fs :<C-u>sp<CR>
+" divide vertically
+nnoremap fv :<C-u>vs<CR>
+" move window
+nnoremap fn gt
+nnoremap fp gT
+nnoremap fh <C-w>h
+nnoremap fl <C-w>l
+nnoremap fj <C-w>j
+nnoremap fk <C-w>k
+" new tab
+"nnoremap ft :<C-u>tabnew<CR>
+nnoremap ft :tabnew<Return>
+" jump 1st window by f1 
+for n in range(1, 9)
+  execute 'nnoremap f' .n. ' ' .n.'<C-W><C-W>'
+endfor
+" The prefix key for tab jump
+nnoremap    [Tag]   <Nop>
+nmap    t [Tag]
+" Tab jump
+for n in range(1, 9)
+  execute 'nnoremap <silent> [Tag]'.n  ':<C-u>tabnext'.n.'<CR>'
+endfor
+" treee view in netrw
+let g:netrw_liststyle=3
+" indent setting
+" display tab by default
+:set list
+" insert space by tab key
+:set expandtab
+" when disable inserting space by tab
+" :set noet
+:set shiftwidth=2
+" no swap file
+:set noswapfile
+" overwrite
+set backupcopy=yes
+" start terminal with insert mode by :te
+autocmd BufWinEnter,WinEnter term://* startinsert
+" FileType setting
+autocmd BufRead,BufNewFile *.php setfiletype php
+" □とか○の文字があってもカーソル位置がずれないようにする
+if exists('&ambiwidth')
+  set ambiwidth=double
+endif
+colorscheme japanesque
+set ttyfast
+set lazyredraw
 
 " 隠しファイルを表示する
 let NERDTreeShowHidden = 1
@@ -220,7 +180,7 @@ endif
 let g:neosnippet#snippets_directory='~/Dropbox/dotfiles/snippets/'
 
 " ack + ag
-let g:memo_path = '/Users/kazumasa/Dropbox/text/coding/'
+let g:memo_path = '/Users/kazumasa/GoogleDrive/text/coding/'
 let g:ackprg = 'ag --vimgrep'
 nnoremap <Space>a :SearchMemo<Space> 
 function! SearchMemoFunc(keyword)
@@ -232,48 +192,11 @@ command! -nargs=1 SearchMemo call SearchMemoFunc("<args>") " markdown
 :nnoremap <Space>3 mx0i<C-r>'###<ESC>`x
 :nnoremap <Space>0 mx0dw`x
 
-" Slimux
-map <Leader>s :SlimuxREPLSendLine<CR>
-vmap <Leader>s :SlimuxREPLSendSelection<CR>
-map <Leader>b :SlimuxREPLSendBuffer<CR>
-map <Leader>a :SlimuxShellLast<CR>
-map <Leader>k :SlimuxSendKeysLast<CR>
-let g:slimux_python_ipython = 1
-let g:slimux_select_from_current_window = 1
-" neocomplete
-" Note: This option must set it in .vimrc(_vimrc).  NOT IN .gvimrc(_gvimrc)!
-" Disable AutoComplPop.
-let g:acp_enableAtStartup = 0
-" Use neocomplete.
-let g:neocomplete#enable_at_startup = 1
-" Use smartcase.
-let g:neocomplete#enable_smart_case = 1
-" Set minimum syntax keyword length.
-let g:neocomplete#sources#syntax#min_keyword_length = 3
-let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
-
 " Rust
 let g:rustfmt_autosave = 1
 let g:rustfmt_command = '$HOME/.cargo/bin/rustfmt'
 set hidden
 let g:racer_cmd = '$HOME/.cargo/bin/racer'
-
-" Define dictionary.
-let g:neocomplete#sources#dictionary#dictionaries = {
-    \ 'default' : '',
-    \ 'vimshell' : $HOME.'/.vimshell_hist',
-    \ 'scheme' : $HOME.'/.gosh_completions'
-        \ }
-
-" Define keyword.
-if !exists('g:neocomplete#keyword_patterns')
-    let g:neocomplete#keyword_patterns = {}
-endif
-let g:neocomplete#keyword_patterns['default'] = '\h\w*'
-
-" Plugin key-mappings.
-inoremap <expr><C-g>     neocomplete#undo_completion()
-inoremap <expr><C-r>     neocomplete#complete_common_string()
 
 " Recommended key-mappings.
 " <CR>: close popup and save indent.
@@ -288,13 +211,8 @@ inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
 " Close popup by <Space>.
 " inoremap <expr><Space> pumvisible() ? "\<C-y>" : "\<Space>"
 
-" AutoComplPop like behavior.
-" let g:neocomplete#enable_auto_select = 1
-
 " Shell like behavior(not recommended).
 "set completeopt+=longest
-"let g:neocomplete#enable_auto_select = 1
-"let g:neocomplete#disable_auto_complete = 1
 " inoremap <expr><TAB>  pumvisible() ? "\<Down>" : "\<C-x>\<C-u>"
 
 let g:jsx_ext_required = 0 " Allow JSX in normal JS files
@@ -306,19 +224,6 @@ autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
 autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
 autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 
-" Enable heavy omni completion.
-if !exists('g:neocomplete#sources#omni#input_patterns')
-  let g:neocomplete#sources#omni#input_patterns = {}
-endif
-"let g:neocomplete#sources#omni#input_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
-"let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
-"let g:neocomplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
-
-" For perlomni.vim setting.
-" https://github.com/c9s/perlomni.vim
-let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
-" end of neocomplete
-" "
 " vim-indent-guides
 let g:indent_guides_auto_colors = 0
 " Vim 起動時 vim-indent-guides を自動起動
@@ -346,6 +251,7 @@ if executable('ag')
 endif
 
 " vim-quickrun
+" run by <leader>r
 " * : すべての言語に対して
 let g:quickrun_config = {
       \'*': {
@@ -355,6 +261,9 @@ nnoremap <expr><silent> <C-c> quickrun#is_running() ? quickrun#sweep_sessions() 
 
 " jshint2.vim
 set runtimepath+=~/.vim/bundle/jshint2.vim/
+
+" YouComleteMe
+let g:ycm_python_binary_path = 'python'
 
 " vim-phplint
 noremap <C-l> :Phplint<CR>
@@ -395,11 +304,12 @@ set nocompatible
 " allow backspacing over everything in insert mode
 set backspace=indent,eol,start
 
-if has("vms")
-  set nobackup		" do not keep a backup file, use versions instead
-else
-  set backup		" keep a backup file
-endif
+" ------- not needed for neovim? --------
+" if has("vms")
+"   set nobackup		" do not keep a backup file, use versions instead
+" else
+"   set backup		" keep a backup file
+" endif
 set history=50		" keep 50 lines of command line history
 set ruler		" show the cursor position all the time
 set showcmd		" display incomplete commands
